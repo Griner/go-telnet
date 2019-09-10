@@ -36,7 +36,7 @@ OUTER:
 	for {
 		select {
 		case <-ctx.Done():
-			log.Printf("readRoutine ctx done\n")
+			// log.Printf("readRoutine ctx done\n")
 			break OUTER
 		case str, ok := <-netChan:
 			if !ok {
@@ -44,10 +44,11 @@ OUTER:
 				break OUTER
 			}
 
-			log.Printf("From server: %s", str)
+			// log.Printf("From server: %s", str)
+			fmt.Println(str)
 		}
 	}
-	log.Printf("Finished readRoutine")
+	// log.Printf("Finished readRoutine")
 }
 
 func writeRoutine(ctx context.Context, conn net.Conn) {
@@ -58,14 +59,14 @@ OUTER:
 	for {
 		select {
 		case <-ctx.Done():
-			log.Printf("writeRoutine ctx done\n")
+			// log.Printf("writeRoutine ctx done\n")
 			break OUTER
 		case str, ok := <-stdioChan:
 			if !ok {
 				log.Printf("Stdio chan closed\n")
 				break OUTER
 			}
-			log.Printf("To server %v\n", str)
+			// log.Printf("To server %v\n", str)
 
 			_, err := conn.Write([]byte(fmt.Sprintf("%s\n", str)))
 			if err != nil {
@@ -74,7 +75,7 @@ OUTER:
 		}
 
 	}
-	log.Printf("Finished writeRoutine")
+	// log.Printf("Finished writeRoutine")
 }
 
 func Telnet(server, port string, timeout int) {
